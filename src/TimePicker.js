@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
+import './style.sass';
 
-export default class TimePicker extends Component {
+const TimePicker = (props) => {
 
-  times = () => {
+  const times = () => {
     let times = [];
     for (let h = 0; h < 24; h++) {
       for (let m = 0; m < 60; m+=30) {
@@ -13,14 +14,14 @@ export default class TimePicker extends Component {
     return times;
   }
 
-  render() {
-    const times = <ul className='p-calendar__timelist'>{this.times().map((time, i) => <li className='p-calendar__timelistitem' key={i} data-time={time} data-beginning={this.props.beginningTime === time} onClick={e => this.props.handleClickTime(e)}>{time}</li>)}</ul>;
-    return (
-      <div className='p-calendar__timepicker'>
-        { times }
-      </div>
-    );
-
-  }
+  const timeList = <ul className='Calendar__timelist'>{times().map((time, i) => <li className='Calendar__timelistitem' key={i} data-time={time} data-beginning={props.beginningTime === time} onClick={e => props.handleClickTime(e)}>{time}</li>)}</ul>;
+  
+  return (
+    <div className='Calendar__timepicker'>
+      { timeList }
+    </div>
+  );
 
 }
+
+export default TimePicker;

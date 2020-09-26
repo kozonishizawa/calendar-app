@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CalendarHeader from './CalendarHeader';
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
+import './reset.css';
+import './style.sass';
 
 export default class Calendar extends Component {
+  
   constructor(props) {
+    
     super(props);
+    
     const date = new Date();
+
     this.state = {
       year: date.getFullYear(),
       month: date.getMonth() + 1,
@@ -18,10 +24,6 @@ export default class Calendar extends Component {
       }],
       forward: [],
       stepNumber: 0,
-      visible: {
-        year: false,
-        month: false,
-      },
       // copied: false,
     };
   }
@@ -52,36 +54,6 @@ export default class Calendar extends Component {
     });
   }
 
-  // 年リスト表示
-  showYears = () => {
-    this.setState({
-      visible: {
-        year: true,
-        month: false,
-      },
-    })
-  }
-
-  // 月リストを表示
-  showMonths = () => {
-    this.setState({
-      visible: {
-        year: false,
-        month: true,
-      },
-    })
-  }
-
-  // マウスが離れた時
-  onMouseLeave = () => {
-    this.setState({
-      visible: {
-        year: false,
-        month: false,
-      },
-    })
-  }
-
   // 日付をクリック
   hundleClickDate = e => {
     const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
@@ -90,7 +62,6 @@ export default class Calendar extends Component {
     const date = data.date;
     const weekday = data.weekday;
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    console.log(`${month}月${date}日（${weekdays[weekday]}）`);
     const text = `\n${month}月${date}日（${weekdays[weekday]}）`;
     this.setState({
       history: history.concat([{
@@ -100,14 +71,13 @@ export default class Calendar extends Component {
       forward: [],
       stepNumber: history.length,
     });
-      console.log(`step: ${this.state.stepNumber} history: ${this.state.history.length} forward: ${this.state.forward.length}` );
   }
 
   // 時間をクリック
   handleClickTime = e => {
     const time = e.target.dataset.time;
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    const text = history[history.length - 1].beginningTime ? `${time}　` : `${time}〜`;
+    const text = history[history.length - 1].beginningTime ? `${time}` : `　${time}〜`;
     this.setState({
       history: history.concat([{
         text: history[history.length -1].text + text,
@@ -116,13 +86,11 @@ export default class Calendar extends Component {
       forward: [],
       stepNumber: history.length,
     });
-      console.log(`step: ${this.state.stepNumber} history: ${this.state.history.length} forward: ${this.state.forward.length}` );
   }
 
   // カレンダーをめくる
   turnCalendar = e => {
     const data = e.target.dataset;
-    console.log(data);
     this.setState({
       year: data.year ? parseInt(data.year) : this.state.year,
       month: data.month ? parseInt(data.month) : this.state.month,
@@ -158,7 +126,6 @@ export default class Calendar extends Component {
         forward: this.state.forward.concat(forward[forward.length - 1]),
         stepNumber: stepNumber - 1,
       })
-      console.log(`step: ${this.state.stepNumber} history: ${this.state.history.length} forward: ${this.state.forward.length}` );
     }
   }
 
@@ -175,7 +142,6 @@ export default class Calendar extends Component {
         stepNumber: stepNumber + 1,
       })
     }
-    console.log(`step: ${this.state.stepNumber} history: ${this.state.history.length} forward: ${this.state.forward.length}` );
   }
 
   // リセット
@@ -195,46 +161,42 @@ export default class Calendar extends Component {
     this.setState({copied: true});
   };
 
-  // うんこ
-  unko = () => {
-    const history = this.state.history;
-    console.log(history[history.length - 1].beginningTime);
-  }
-
   render() {
 
     return (
-      <div className='p-calendar'>
-        <section className='p-calendar__screen'>
-          <textarea cols='50' rows='10' value={this.state.history[this.state.history.length -1].text} onChange={e => this.onChangeText(e)}></textarea>
-        </section>
-        <section className='p-calendar__datetimepicker'>
-          <div className='p-calendar__calendar'>
-            <CalendarHeader year={this.state.year} month={this.state.month} visible={this.state.visible} turnCalendar={this.turnCalendar} showPreviousMonth={this.showPreviousMonth} showNextMonth={this.showNextMonth} resetCalendar={this.resetCalendar} showYears={this.showYears} showMonths={this.showMonths} onMouseLeave={this.onMouseLeave} />
-            <DatePicker year={this.state.year} month={this.state.month} hundleClickDate={this.hundleClickDate} />
+        <React.Fragment>
+          <div className='Calendar'>
+            <section className='Calendar__screen'>
+              <textarea cols='50' rows='10' value={this.state.history[this.state.history.length -1].text} onChange={e => this.onChangeText(e)}></textarea>
+            </section>
+            <section className='Calendar__datetimepicker'>
+              <div>
+                <CalendarHeader year={this.state.year} month={this.state.month} turnCalendar={this.turnCalendar} showPreviousMonth={this.showPreviousMonth} showNextMonth={this.showNextMonth} resetCalendar={this.resetCalendar} />
+                <DatePicker year={this.state.year} month={this.state.month} hundleClickDate={this.hundleClickDate} />
+              </div>
+              <TimePicker handleClickTime={this.handleClickTime}  beginningTime={this.state.history[this.state.history.length -1].beginningTime} />
+            </section>
+            <section className='Calendar__buttons'>
+              <div className='Col_4'>
+                <button className='Calendar__back' onClick={this.goBack}>戻る</button>
+              </div>
+              <div className='Col_4'>
+                <button className='Calendar__forward' onClick={this.goForward}>進む</button>
+              </div>
+              <div className='Col_4'>
+                <button className='Calendar__reset' onClick={this.reset}>リセット</button>
+              </div>
+              <div className='Col_4'>
+                <CopyToClipboard
+                  onCopy={this.onCopy}
+                  text={this.state.history[this.state.history.length -1].text}>
+                  <button className='Calendar__copy'>コピー</button>
+                </CopyToClipboard>
+              </div>
+            </section>
           </div>
-          <TimePicker handleClickTime={this.handleClickTime}  beginningTime={this.state.history[this.state.history.length -1].beginningTime} />
-        </section>
-        <section className='p-calendar__buttons'>
-          <div className='l-col-4'>
-            <button className='p-calendar__back' onClick={this.goBack}>戻る</button>
-          </div>
-          <div className='l-col-4'>
-            <button className='p-calendar__forward' onClick={this.goForward}>進む</button>
-          </div>
-          <div className='l-col-4'>
-            <button className='p-calendar__reset' onClick={this.reset}>リセット</button>
-          </div>
-          <div className='l-col-4'>
-            <CopyToClipboard
-              onCopy={this.onCopy}
-              text={this.state.history[this.state.history.length -1].text}>
-              <button className='p-calendar__copy'>コピー</button>
-            </CopyToClipboard>
-          </div>
-        </section>
-      </div>
-    )
+        </React.Fragment>
+      )
   }
 
 }

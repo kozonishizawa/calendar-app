@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Calendar from './Calendar'
-import './index.css';
+import './style.sass';
 import './reset.css';
 // import * as serviceWorker from './serviceWorker';
 
