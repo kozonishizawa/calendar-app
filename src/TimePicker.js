@@ -1,7 +1,13 @@
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 import './style.sass';
 
-const TimePicker = (props) => {
+const TimePicker = props => {
+
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current.scrollTop = 430;
+  }, [ref])
 
   const times = () => {
     let times = [];
@@ -17,7 +23,7 @@ const TimePicker = (props) => {
   const timeList = <ul className='Calendar__timelist'>{times().map((time, i) => <li className='Calendar__timelistitem' key={i} data-time={time} data-beginning={props.beginningTime === time} onClick={e => props.handleClickTime(e)}>{time}</li>)}</ul>;
   
   return (
-    <div className='Calendar__timepicker'>
+    <div ref={ref} className='Calendar__timepicker'>
       { timeList }
     </div>
   );

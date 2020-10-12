@@ -1,7 +1,7 @@
 import React, {useState } from 'react';
 import './style.sass';
 
-const CalendarHeader = (props) => {
+const CalendarHeader = props => {
 
   const [visible, setVisible] = useState({
     year: false,

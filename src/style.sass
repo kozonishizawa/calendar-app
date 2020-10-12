@@ -17,6 +17,7 @@ code
   align-items: center
   color: rgba(72, 72, 72, 1)
   user-select: none
+  touch-action: manipulation
   &__screen
     width: 355px
     user-select: text
@@ -35,6 +36,10 @@ code
     display: flex
     flex-direction: row
     margin-bottom: 16px
+    box-sizing: border-box
+  &__datepicker
+    display: flex
+    flex-direction: column
   &__timepicker
     width: 64px
     height: 265px
@@ -42,6 +47,9 @@ code
     margin-left: 16px
     font-size: 14px
     border: 1px solid #aab4b9
+    box-sizing: border-box
+  &__timelist
+    width: 100%
   &__timelistitem
     padding: 4px
     border-bottom: 1px solid rgba(228, 231, 231, 1)
@@ -95,6 +103,7 @@ code
   &__table
     margin: 0 auto
     font-size: 24px
+    align-self: flex-end
   &__table thead
     padding: 16px 0
   &__table th

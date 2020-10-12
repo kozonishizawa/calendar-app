@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.sass';
 
-const DatePicker = (props) => {
+const DatePicker = props => {
   
   const isToday = day => {
     const date = new Date();
